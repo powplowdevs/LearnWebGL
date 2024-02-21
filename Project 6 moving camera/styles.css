@@ -1,0 +1,9 @@
+body h1{
+    text-align: center;
+    font-family:  Helvetica, Arial, sans-serif;
+    font-size: larger;
+}
+
+canvas{
+    border: 1px solid black;
+}
