@@ -6,4 +6,11 @@ body h1{
 
 canvas{
     border: 1px solid black;
+    /* width: "400";
+    height: "400"; */
+}
+
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
 }

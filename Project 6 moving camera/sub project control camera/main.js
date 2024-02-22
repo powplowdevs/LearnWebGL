@@ -1,5 +1,8 @@
 //Setup
+document.onkeydown = moveCamera;
 const canvas = document.querySelector('canvas');
+canvas.width = window.innerWidth-100;
+canvas.height = window.innerHeight-100;
 const gl = canvas.getContext('webgl');
 function randomColor(){
     return [Math.random(),Math.random(),Math.random()];
@@ -71,6 +74,7 @@ const vertexData = [
     -.5, -.5, 0.5,
     0.5, -.5, -.5,
     -.5, -.5, -.5,
+    
 ];
 
 //Save color data
@@ -162,24 +166,14 @@ mat4.invert(viewMatrix, viewMatrix);
 // ARGS:         Matrix,          FOV (angle/radians),    Aspect ratio,       Near cull, far cull
 mat4.perspective(projectionMatrix, 75*(Math.PI/180), canvas.width/canvas.height, 1e-4, 1e4)
 
-let currX=0;
-let currY=0;
-let lastX=currX;
-let lastY=currY;
+let yPan=0;
+const Sense = 0.05;
+
 function animate(){
     requestAnimationFrame(animate);
-    // mat4.rotateZ(modleMatrix, modleMatrix, Math.PI /170);
-    // mat4.rotateX(modleMatrix, modleMatrix, Math.PI /120);
-    // mat4.rotateY(modleMatrix, modleMatrix, Math.PI /70);
-
-    //**WORKING ON THIS PART */
-
-    //x movement
-    if(!((lastX-currX)/500==0))
-        mat4.rotateY(viewMatrix, viewMatrix, (lastX-currX)/500);
-        console.log((currX-lastX)/500);
-
-
+    //mat4.rotateZ(modleMatrix, modleMatrix, Math.PI /170);
+    //mat4.rotateX(modleMatrix, modleMatrix, Math.PI /120);
+    //mat4.rotateY(modleMatrix, modleMatrix, Math.PI /70);
 
     mat4.multiply(modleViewMatrix, viewMatrix, modleMatrix)
     mat4.multiply(mvpMatrix, projectionMatrix, modleViewMatrix)
@@ -192,13 +186,41 @@ function animate(){
 animate();
 
 //Track mouse
-function grabPos(event) {
-    lastX=currX;
-    lastY=currY;
-    currX=event.clientX;
-    currY=event.clientY;
-}
-function resetPos(){
-    currX=0;
-    currY=0;
+function moveCamera(e) {
+
+    e = e || window.event;
+
+    
+    // ***PLAYER MOVEMENT***
+    //Move forward
+    if (e.keyCode == '87') {
+        //MOVE BOX AWAY
+        mat4.scale(viewMatrix, viewMatrix, [2,2,2]);
+    }
+    //Move f
+    if (e.keyCode == '83') {
+        //MOVE BOX AWAY
+        mat4.scale(viewMatrix, viewMatrix, [0.1,0.1,-0.1]);
+    }
+
+    // ***CAMERA MOVEMENT***
+    //Pan up
+    if (e.keyCode == '38' && yPan < 2) {
+        mat4.rotateX(viewMatrix, viewMatrix, Sense);
+        yPan+=Sense;
+    }
+    //Pan down
+    else if (e.keyCode == '40' && yPan > -1) {
+        mat4.rotateX(viewMatrix, viewMatrix, -Sense);
+        yPan-=Sense;
+    }
+    //Pan left
+    else if (e.keyCode == '37') {
+        mat4.rotateY(viewMatrix, viewMatrix, Sense);
+    }
+    //Pan right
+    else if (e.keyCode == '39') {
+        mat4.rotateY(viewMatrix, viewMatrix, -Sense);
+    }
+
 }
