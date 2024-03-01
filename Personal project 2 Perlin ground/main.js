@@ -5,11 +5,11 @@ function setup() {
     const gl = canvas.getContext('webgl');
     function calculateColor(y, size) {
         let r, g, b;
-        if (y > size * (2/3)) {  // High points, corresponds to y > 2/3 * 255
+        if (y > size*10 * (2/3)) {  // High points, corresponds to y > 2/3 * 255
             r = 1;
             g = 1;
             b = 1;
-        } else if (y > size * (1/3)) {  // Middle points, corresponds to y > 1/3 * 255
+        } else if (y > size*10 * (1/3)) {  // Middle points, corresponds to y > 1/3 * 255
             r = 0;
             g = 1;
             b = 0;
@@ -80,7 +80,7 @@ function setup() {
         for(let c=0; c<col; c++){
             for(let r=0; r<row; r++){
                 //Make 6 points of face
-                let facePoints = makeFace(x, noise(x+z*Math.random())*size, z, size, points);
+                let facePoints = makeFace(x, noise(x+z*Math.random())*size*10, z, size, points);
                 points.push(...facePoints);
                 // x+=size;
                 if(x >= row*col/10){
@@ -159,7 +159,7 @@ function setup() {
     //     -.5, -.5, -.5,
     // ];
     let colorData = [];
-    const vertexData = createGround(100,100,50);
+    const vertexData = createGround(100,100,10);
     console.log(vertexData);
 
 
